@@ -13,28 +13,9 @@
 		1E714CBB22FC543F0054512C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E714CBA22FC543F0054512C /* Assets.xcassets */; };
 		1E714CBE22FC543F0054512C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E714CBD22FC543F0054512C /* Preview Assets.xcassets */; };
 		1E714CC122FC543F0054512C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E714CBF22FC543F0054512C /* LaunchScreen.storyboard */; };
-		1E714CCC22FC543F0054512C /* KmpStarterSwiftUiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E714CCB22FC543F0054512C /* KmpStarterSwiftUiTests.swift */; };
-		1E714CD722FC543F0054512C /* KmpStarterSwiftUiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E714CD622FC543F0054512C /* KmpStarterSwiftUiUITests.swift */; };
 		1E714CE822FC5C330054512C /* common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E714CE722FC5C330054512C /* common.framework */; };
 		1E714CE922FC5C330054512C /* common.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1E714CE722FC5C330054512C /* common.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		1E714CC822FC543F0054512C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1E714CA922FC543C0054512C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1E714CB022FC543C0054512C;
-			remoteInfo = KmpStarterSwiftUi;
-		};
-		1E714CD322FC543F0054512C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1E714CA922FC543C0054512C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1E714CB022FC543C0054512C;
-			remoteInfo = KmpStarterSwiftUi;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		1E714CEA22FC5C330054512C /* Embed Frameworks */ = {
@@ -59,12 +40,6 @@
 		1E714CBD22FC543F0054512C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1E714CC022FC543F0054512C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1E714CC222FC543F0054512C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1E714CC722FC543F0054512C /* KmpStarterSwiftUiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KmpStarterSwiftUiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1E714CCB22FC543F0054512C /* KmpStarterSwiftUiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KmpStarterSwiftUiTests.swift; sourceTree = "<group>"; };
-		1E714CCD22FC543F0054512C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1E714CD222FC543F0054512C /* KmpStarterSwiftUiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KmpStarterSwiftUiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1E714CD622FC543F0054512C /* KmpStarterSwiftUiUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KmpStarterSwiftUiUITests.swift; sourceTree = "<group>"; };
-		1E714CD822FC543F0054512C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1E714CE722FC5C330054512C /* common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = common.framework; path = "../../common/build/xcode-frameworks/common.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,20 +52,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1E714CC422FC543F0054512C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1E714CCF22FC543F0054512C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -98,8 +59,6 @@
 			isa = PBXGroup;
 			children = (
 				1E714CB322FC543C0054512C /* KmpStarterSwiftUi */,
-				1E714CCA22FC543F0054512C /* KmpStarterSwiftUiTests */,
-				1E714CD522FC543F0054512C /* KmpStarterSwiftUiUITests */,
 				1E714CB222FC543C0054512C /* Products */,
 				1E714CE522FC5C080054512C /* Frameworks */,
 			);
@@ -109,8 +68,6 @@
 			isa = PBXGroup;
 			children = (
 				1E714CB122FC543C0054512C /* KmpStarterSwiftUi.app */,
-				1E714CC722FC543F0054512C /* KmpStarterSwiftUiTests.xctest */,
-				1E714CD222FC543F0054512C /* KmpStarterSwiftUiUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,24 +92,6 @@
 				1E714CBD22FC543F0054512C /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		1E714CCA22FC543F0054512C /* KmpStarterSwiftUiTests */ = {
-			isa = PBXGroup;
-			children = (
-				1E714CCB22FC543F0054512C /* KmpStarterSwiftUiTests.swift */,
-				1E714CCD22FC543F0054512C /* Info.plist */,
-			);
-			path = KmpStarterSwiftUiTests;
-			sourceTree = "<group>";
-		};
-		1E714CD522FC543F0054512C /* KmpStarterSwiftUiUITests */ = {
-			isa = PBXGroup;
-			children = (
-				1E714CD622FC543F0054512C /* KmpStarterSwiftUiUITests.swift */,
-				1E714CD822FC543F0054512C /* Info.plist */,
-			);
-			path = KmpStarterSwiftUiUITests;
 			sourceTree = "<group>";
 		};
 		1E714CE522FC5C080054512C /* Frameworks */ = {
@@ -185,42 +124,6 @@
 			productReference = 1E714CB122FC543C0054512C /* KmpStarterSwiftUi.app */;
 			productType = "com.apple.product-type.application";
 		};
-		1E714CC622FC543F0054512C /* KmpStarterSwiftUiTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1E714CDE22FC543F0054512C /* Build configuration list for PBXNativeTarget "KmpStarterSwiftUiTests" */;
-			buildPhases = (
-				1E714CC322FC543F0054512C /* Sources */,
-				1E714CC422FC543F0054512C /* Frameworks */,
-				1E714CC522FC543F0054512C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				1E714CC922FC543F0054512C /* PBXTargetDependency */,
-			);
-			name = KmpStarterSwiftUiTests;
-			productName = KmpStarterSwiftUiTests;
-			productReference = 1E714CC722FC543F0054512C /* KmpStarterSwiftUiTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		1E714CD122FC543F0054512C /* KmpStarterSwiftUiUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1E714CE122FC543F0054512C /* Build configuration list for PBXNativeTarget "KmpStarterSwiftUiUITests" */;
-			buildPhases = (
-				1E714CCE22FC543F0054512C /* Sources */,
-				1E714CCF22FC543F0054512C /* Frameworks */,
-				1E714CD022FC543F0054512C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				1E714CD422FC543F0054512C /* PBXTargetDependency */,
-			);
-			name = KmpStarterSwiftUiUITests;
-			productName = KmpStarterSwiftUiUITests;
-			productReference = 1E714CD222FC543F0054512C /* KmpStarterSwiftUiUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -233,14 +136,6 @@
 				TargetAttributes = {
 					1E714CB022FC543C0054512C = {
 						CreatedOnToolsVersion = 11.0;
-					};
-					1E714CC622FC543F0054512C = {
-						CreatedOnToolsVersion = 11.0;
-						TestTargetID = 1E714CB022FC543C0054512C;
-					};
-					1E714CD122FC543F0054512C = {
-						CreatedOnToolsVersion = 11.0;
-						TestTargetID = 1E714CB022FC543C0054512C;
 					};
 				};
 			};
@@ -258,8 +153,6 @@
 			projectRoot = "";
 			targets = (
 				1E714CB022FC543C0054512C /* KmpStarterSwiftUi */,
-				1E714CC622FC543F0054512C /* KmpStarterSwiftUiTests */,
-				1E714CD122FC543F0054512C /* KmpStarterSwiftUiUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -272,20 +165,6 @@
 				1E714CC122FC543F0054512C /* LaunchScreen.storyboard in Resources */,
 				1E714CBE22FC543F0054512C /* Preview Assets.xcassets in Resources */,
 				1E714CBB22FC543F0054512C /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1E714CC522FC543F0054512C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1E714CD022FC543F0054512C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,36 +201,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1E714CC322FC543F0054512C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1E714CCC22FC543F0054512C /* KmpStarterSwiftUiTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1E714CCE22FC543F0054512C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1E714CD722FC543F0054512C /* KmpStarterSwiftUiUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		1E714CC922FC543F0054512C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1E714CB022FC543C0054512C /* KmpStarterSwiftUi */;
-			targetProxy = 1E714CC822FC543F0054512C /* PBXContainerItemProxy */;
-		};
-		1E714CD422FC543F0054512C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1E714CB022FC543C0054512C /* KmpStarterSwiftUi */;
-			targetProxy = 1E714CD322FC543F0054512C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		1E714CBF22FC543F0054512C /* LaunchScreen.storyboard */ = {
@@ -518,84 +368,6 @@
 			};
 			name = Release;
 		};
-		1E714CDF22FC543F0054512C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = KmpStarterSwiftUiTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.KmpStarterSwiftUiTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KmpStarterSwiftUi.app/KmpStarterSwiftUi";
-			};
-			name = Debug;
-		};
-		1E714CE022FC543F0054512C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = KmpStarterSwiftUiTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.KmpStarterSwiftUiTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KmpStarterSwiftUi.app/KmpStarterSwiftUi";
-			};
-			name = Release;
-		};
-		1E714CE222FC543F0054512C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = KmpStarterSwiftUiUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.KmpStarterSwiftUiUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = KmpStarterSwiftUi;
-			};
-			name = Debug;
-		};
-		1E714CE322FC543F0054512C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = KmpStarterSwiftUiUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.KmpStarterSwiftUiUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = KmpStarterSwiftUi;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -613,24 +385,6 @@
 			buildConfigurations = (
 				1E714CDC22FC543F0054512C /* Debug */,
 				1E714CDD22FC543F0054512C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		1E714CDE22FC543F0054512C /* Build configuration list for PBXNativeTarget "KmpStarterSwiftUiTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1E714CDF22FC543F0054512C /* Debug */,
-				1E714CE022FC543F0054512C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		1E714CE122FC543F0054512C /* Build configuration list for PBXNativeTarget "KmpStarterSwiftUiUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1E714CE222FC543F0054512C /* Debug */,
-				1E714CE322FC543F0054512C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -9,15 +9,18 @@ xcode {
 
 
 kotlin {
+
     targets {
         fromPreset(presets.android, 'android')
         final def iOSTarget = System.getenv('SDK_NAME')?.startsWith("iphoneos") \
                               ? presets.iosArm64 : presets.iosX64
 
         fromPreset(iOSTarget, 'ios') {
+
             binaries {
                 framework('common', [DEBUG])
             }
+            compilations.main.extraOpts "-Xobjc-generics"
         }
 
 //        fromPreset(presets.iosArm64, 'ios') {
@@ -76,6 +79,7 @@ kotlin {
         }
 
     }
+
 }
 
 android {
