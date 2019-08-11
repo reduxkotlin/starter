@@ -22,13 +22,6 @@ kotlin {
             }
             compilations.main.extraOpts "-Xobjc-generics"
         }
-
-//        fromPreset(presets.iosArm64, 'ios') {
-//            binaries {
-//                framework('common')
-//            }
-//        }
-
     }
     sourceSets {
         commonMain {

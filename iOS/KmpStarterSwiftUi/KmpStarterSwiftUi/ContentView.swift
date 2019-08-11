@@ -11,8 +11,7 @@ import common
 
 struct ContentView: View {
     var body: some View {
-        let txt = KmpStarterAppKt.store.state!.toMainViewState().counterText
-        return Text(txt)
+        return Text(KmpStarterAppKt.helloWordText)
     }
 }
 
