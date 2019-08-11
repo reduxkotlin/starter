@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-multiplatform'
+apply plugin: 'kotlinx-serialization'
 apply plugin: 'co.touchlab.kotlinxcodesync'
 
 xcode {
@@ -28,6 +29,8 @@ kotlin {
             dependencies {
                 api 'org.jetbrains.kotlin:kotlin-stdlib'
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion"
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serializationVersion"
+                implementation "io.ktor:ktor-client-logging:$ktorVersion"
                 implementation "org.reduxkotlin:redux-kotlin:0.2.6"
                 implementation "org.reduxkotlin:redux-kotlin-thunk:0.2.8"
                 implementation "org.reduxkotlin:redux-kotlin-reselect:0.2.7"
@@ -51,12 +54,27 @@ kotlin {
             dependencies {
                 api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serializationVersion"
+
+                implementation "io.ktor:ktor-client-core-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-logging-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-serialization-jvm:$ktorVersion"
             }
         }
+        /*
         jvmMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serializationVersion"
+
+                implementation "io.ktor:ktor-client-core-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-logging-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-serialization-jvm:$ktorVersion"
             }
         }
         jvmTest {
@@ -65,11 +83,21 @@ kotlin {
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
             }
         }
+        
+         */
 
         iosMain {
             dependencies {
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutinesVersion"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serializationVersion"
+
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serializationVersion"
+                implementation "io.ktor:ktor-client-logging-native:$ktorVersion"
+
+                implementation "io.ktor:ktor-client-ios:$ktorVersion"
+                implementation "io.ktor:ktor-client-core-native:$ktorVersion"
+                implementation "io.ktor:ktor-client-json-native:$ktorVersion"
+                implementation "io.ktor:ktor-client-serialization-native:$ktorVersion"
             }
         }
 

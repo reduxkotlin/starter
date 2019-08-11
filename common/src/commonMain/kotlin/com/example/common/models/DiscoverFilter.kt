@@ -1,5 +1,7 @@
 package com.example.common.models
 
+import kotlinx.serialization.Serializable
+
 
 //
 //  DiscoverFilter.swift
@@ -8,6 +10,7 @@ package com.example.common.models
 //  Created by Thomas Ricouard on 23/06/2019.
 //  Copyright © 2019 Thomas Ricouard. All rights reserved.
 //
+@Serializable
 data class DiscoverFilter(
     val year: Int,
     val startYear: Int?,
@@ -29,19 +32,27 @@ data class DiscoverFilter(
             )
 
         fun randomYear(): Int {
+            /*
             val calendar = Calendar.current
             random()
             return random(in = 1950 until calendar.component(. year, from = Date()))
+
+             */
+            return 0
         }
 
         fun randomSort(): String {
+            /*
             val sortBy =
                 listOf("popularity.desc", "popularity.asc", "vote_average.asc", "vote_average.desc")
             return sortBy[Int.random(in = 0 until sortBy.size)]
+
+             */
+            return ""
         }
 
-        fun randomPage(): Int =
-            Int.random(in = 1 until 20)
+        fun randomPage(): Int = 0
+//            Int.random(in = 1 until 20)
     }
 
 

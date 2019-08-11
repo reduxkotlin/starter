@@ -16,12 +16,13 @@ import kotlin.Result.Companion.success
 //  Copyright © 2019 Thomas Ricouard. All rights reserved.
 //
 class PeopleActions {
+    /*
 
-    fun FetchDetail(people: Int) = createThunk { dispatch, getState, extraArgument ->
+    fun fetchDetail(people: Int) = createThunk { dispatch, getState, extraArgument ->
             APIService.shared.GET(endpoint = personDetail(person = people), params = null) { result  ->
                 when (result) {
                     success -> dispatch(SetDetail(person = result.response))
-                        .failure -> break
+                        failure -> break
                 }
             }
         }
@@ -30,7 +31,7 @@ class PeopleActions {
         val id: Int,
     val profiles: List<ImageData>)
 
-    fun FetchImages(people: Int) = createThunk { dispatch, getState, extraArgument ->
+    fun fetchImages(people: Int) = createThunk { dispatch, getState, extraArgument ->
             APIService.shared.GET(endpoint = .personImages(person = people), params = null) { result  ->
                 when (result) {
                     let .success(response) -> dispatch(SetImages(people = this.people, images = response.profiles))
@@ -38,12 +39,14 @@ class PeopleActions {
                 }
             }
         }
+        */
 
     data class PeopleCreditsResponse(
         val cast: List<Movie>?,
     val crew: List<Movie>?)
 
-    fun FetchPeopleCredits(people: Int) = createThunk { dispatch, getState, extraArgument ->
+    /*
+    fun fetchPeopleCredits(people: Int) = createThunk { dispatch, getState, extraArgument ->
             APIService.shared.GET(endpoint = .personMovieCredits(person = people), params = null) { result  ->
                 when (result) {
                     let .success(response) -> dispatch(SetPeopleCredits(people = this.people, response = response))
@@ -61,7 +64,7 @@ class PeopleActions {
             }
         }
 
-    fun FetchSearch(query: String, page: Int) = createThunk { dispatch, getState, extraArgument ->
+    fun fetchSearch(query: String, page: Int) = createThunk { dispatch, getState, extraArgument ->
             APIService.shared.GET(endpoint = .searchPerson, params = mapOf<"query" , query, "page" , "${page}">) { result  ->
                 when (result) {
                     let .success(response) -> dispatch(SetSearch(query = this.query, page = this.page, response = response))
@@ -81,6 +84,8 @@ class PeopleActions {
                 }
             }
         }
+
+     */
 
     data class SetDetail(val person: People)
 

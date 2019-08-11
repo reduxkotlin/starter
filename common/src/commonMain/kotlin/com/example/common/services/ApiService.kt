@@ -1,7 +1,19 @@
 package com.example.common.services
 
+import com.example.common.getPreferredLanguage
+import io.ktor.client.HttpClient
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.features.logging.DEFAULT
+import io.ktor.client.features.logging.LogLevel
+import io.ktor.client.features.logging.Logger
+import io.ktor.client.features.logging.Logging
+import io.ktor.client.request.get
+import io.ktor.http.ParametersBuilder
 import io.ktor.http.URLBuilder
 import io.ktor.http.Url
+import io.ktor.http.append
+import kotlinx.serialization.json.Json
 
 
 //
@@ -70,27 +82,57 @@ class APIService(
         }
     }
 
+    val client by lazy {
+        return@lazy try {
+            HttpClient {
+                install(JsonFeature) {
+                    serializer = KotlinxSerializer(Json.nonstrict).apply {
+                    }
+                }
+                install(Logging) {
+                    logger = Logger.DEFAULT
+                    level = LogLevel.ALL
+                }
+            }
+        } catch (e: Exception) {
+            throw RuntimeException("Error initializing: ${e.message}")
+        }
+    }
 
-    fun <T> GET(
+    suspend inline fun <reified T> GET(
         endpoint: APIService.Endpoint,
         params: Map<String, String>?,
         completionHandler: (Result<T>) -> Unit
     ) {
-        val url = URLBuilder()
+        val paramBuilder = ParametersBuilder()
+        paramBuilder.append("api_key", apiKey)
+        paramBuilder.append("language", getPreferredLanguage())
+        params?.forEach { paramBuilder.append(it.key, it.value) }
+
+        val url = URLBuilder(
+            parameters = paramBuilder)
             .path(endpoint.path())
             .build()
+        /*
         val queryURL = baseURL.appendingPathComponent(endpoint.path())
         val components = URLComponents(url = queryURL, resolvingAgainstBaseURL = true)!!
         components.queryItems = listOf(
             URLQueryItem(name = "api_key", value = apiKey),
             URLQueryItem(name = "language", value = Locale.preferredLanguages[0])
         )
+
         val params = params
         if (params != null) {
             for ((_, value) in params.enumerated()) {
                 components.queryItems?.append(URLQueryItem(name = value.key, value = value.value))
             }
         }
+         */
+
+
+
+        val response = client.get<T>(url)
+
         val request = URLRequest(url = components.url!!)
         request.httpMethod = "GET"
         val task = URLSession.shared.dataTask(with = request) { data, response, error ->

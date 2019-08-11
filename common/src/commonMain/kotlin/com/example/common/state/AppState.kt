@@ -12,7 +12,7 @@ enum class MoviesMenu {
     upcoming,
     nowPlaying,
     trending,
-    genres
+    genres;
 
     fun title() = when (this) {
         popular -> "Popular"
