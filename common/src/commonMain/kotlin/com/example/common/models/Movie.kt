@@ -3,6 +3,7 @@ package com.example.common.models
 import com.benasher44.uuid.Uuid
 import com.soywiz.klock.DateTime
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 
 //
@@ -43,14 +44,18 @@ data class Movie(
     val releaseDate: DateTime?
         get() = null //TODO if (release_date != null) Movie.dateFormatter.date(from = release_date!!) else DateTime.now()
 
-    data class Keywords(val keywords: List<Keyword>?) {}
+    @Serializable
+    data class Keywords(val keywords: List<Keyword>?)
 
+    @Serializable
     data class MovieImages(
         val posters: List<ImageData>?,
         val backdrops: List<ImageData>?
-    ) {}
+    )
 
+    @Serializable
     data class productionCountry(
+        @Transient
         val id: Uuid = Uuid(),
         val name: String
     )

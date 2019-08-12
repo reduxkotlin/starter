@@ -1,6 +1,7 @@
 package com.example.common.services
 
 import com.example.common.getPreferredLanguage
+import com.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
@@ -8,11 +9,11 @@ import io.ktor.client.features.logging.DEFAULT
 import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
-import io.ktor.http.ParametersBuilder
-import io.ktor.http.URLBuilder
-import io.ktor.http.Url
-import io.ktor.http.append
+import io.ktor.client.request.header
+import io.ktor.client.request.parameter
+import io.ktor.http.*
 import kotlinx.serialization.json.Json
 
 
@@ -24,7 +25,7 @@ import kotlinx.serialization.json.Json
 //  Copyright © 2019 Thomas Ricouard. All rights reserved.
 //
 class APIService(
-    val baseURL: Url = Url("https://api.themoviedb.org/3"),
+    val baseURL: String = "https://api.themoviedb.org/3",
     val apiKey: String = "1d9b898a212ea52e283351e521e17871"
 ) {
     companion object {
@@ -104,15 +105,9 @@ class APIService(
         params: Map<String, String>?,
         completionHandler: (Result<T>) -> Unit
     ) {
-        val paramBuilder = ParametersBuilder()
-        paramBuilder.append("api_key", apiKey)
-        paramBuilder.append("language", getPreferredLanguage())
-        params?.forEach { paramBuilder.append(it.key, it.value) }
 
-        val url = URLBuilder(
-            parameters = paramBuilder)
-            .path(endpoint.path())
-            .build()
+
+//        Napier.d("URL: $url")
         /*
         val queryURL = baseURL.appendingPathComponent(endpoint.path())
         val components = URLComponents(url = queryURL, resolvingAgainstBaseURL = true)!!
@@ -130,9 +125,22 @@ class APIService(
          */
 
 
+        Napier.d("BASE_URL = $baseURL")
+        try {
+            val response = client.get<T> {
+                apiUrl(endpoint.path())
+                parameter("api_key", apiKey)
+                parameter("language", getPreferredLanguage())
+                params?.forEach { parameter(it.key, it.value) }
+                Napier.d("URL: ${url.buildString()}")
+            }
 
-        val response = client.get<T>(url)
+            completionHandler(Result.success(response))
+        } catch (e: Exception) {
+            completionHandler(Result.failure(e))
+        }
 
+        /*
         val request = URLRequest(url = components.url!!)
         request.httpMethod = "GET"
         val task = URLSession.shared.dataTask(with = request) { data, response, error ->
@@ -160,5 +168,14 @@ class APIService(
             }
         }
         task.resume()
+
+         */
+    }
+    fun HttpRequestBuilder.apiUrl(path: String) {
+        header(HttpHeaders.CacheControl, io.ktor.client.utils.CacheControl.MAX_AGE)
+        url {
+            takeFrom(baseURL)
+            encodedPath = path
+        }
     }
 }

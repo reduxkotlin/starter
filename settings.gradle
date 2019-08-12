@@ -1,2 +1,4 @@
 include ':android', ':common'
 rootProject.name='KmpStarter'
+enableFeaturePreview("GRADLE_METADATA")
+

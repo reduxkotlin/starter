@@ -2,6 +2,7 @@ package com.example.common.models
 
 import com.soywiz.klock.DateTime
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 
 //
@@ -12,4 +13,6 @@ import kotlinx.serialization.Serializable
 //  Copyright © 2019 Thomas Ricouard. All rights reserved.
 //
 @Serializable
-data class MovieUserMeta(var addedToList: DateTime? = null)
+data class MovieUserMeta(
+    @Transient
+    var addedToList: DateTime? = null)
