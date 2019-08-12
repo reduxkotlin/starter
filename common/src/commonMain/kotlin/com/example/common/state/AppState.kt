@@ -3,8 +3,8 @@ package com.example.common.state
 import com.example.common.services.APIService
 
 data class AppState(
-    val moviesState: MoviesState,
-    val peoplesState: PeoplesState
+    val moviesState: MoviesState = MoviesState(),
+    val peoplesState: PeoplesState = PeoplesState()
 )
 
 

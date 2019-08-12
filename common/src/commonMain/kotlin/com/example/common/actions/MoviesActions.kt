@@ -207,7 +207,7 @@ class MoviesActions {
     fun fetchGenres() = thunk { dispatch, _, _ ->
         APIService.shared.GET<GenresResponse>(endpoint = Endpoint.genres, params = null) {
             onSuccess { dispatch(SetGenres(genres = it.genres)) }
-            onFailure { }
+            onFailure { Napier.d(it.message ?: "Failure fetching Genres")}
         }
     }
 

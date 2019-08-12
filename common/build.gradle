@@ -38,7 +38,7 @@ kotlin {
                 implementation "io.ktor:ktor-client-core:$ktorVersion"
                 implementation "io.ktor:ktor-client-json:$ktorVersion"
                 implementation "io.ktor:ktor-client-serialization:$ktorVersion"
-                implementation "com.soywiz.korlibs.klock:klock-jvm:1.5.0"
+                implementation "com.soywiz.korlibs.klock:klock:1.5.0"
                 implementation "com.github.aakira:napier:$napierVersion"
 
 
