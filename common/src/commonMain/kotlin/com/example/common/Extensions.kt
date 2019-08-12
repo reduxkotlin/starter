@@ -1,6 +1,8 @@
 package com.example.common
 
+import com.example.common.MoviesSort.*
 import com.example.common.state.AppState
+import com.soywiz.klock.DateTime
 
 enum class MoviesSort(val title: String, val sortByAPI: String) {
     byReleaseDate("by release date", "release_date.asc"),
@@ -11,26 +13,24 @@ enum class MoviesSort(val title: String, val sortByAPI: String) {
 
 //FIXME: @SwiftKotlin - Kotlin does not support where clauses in extensions:  where Iterator.Element == Int
 
-/*
-fun Sequence.sortedMoviesIds(by: MoviesSort, state: AppState) : List<Int> {
+fun List<Int>.sortedMoviesIds(by: MoviesSort, state: AppState): List<Int> =
     when (by) {
-            .byAddedDate -> {
-        val metas = state.moviesState.moviesUserMeta.filter { this.contains(it.key) }
-        return metas.sorted { it.value.addedToList ?: Date() > $1.value.addedToList ?: Date() }.compactMap { it.key }
-    }
-            .byReleaseDate -> {
-        val movies = state.moviesState.movies.filter { this.contains(it.key) }
-        return movies.sorted { it.value.releaseDate ?: Date() > $1.value.releaseDate ?: Date() }.compactMap { it.key }
-    }
-            .byPopularity -> {
-        val movies = state.moviesState.movies.filter { this.contains(it.key) }
-        return movies.sorted { it.value.popularity > $1.value.popularity }.compactMap { it.key }
-    }
-            .byScore -> {
-        val movies = state.moviesState.movies.filter { this.contains(it.key) }
-        return movies.sorted { it.value.vote_average > $1.value.vote_average }.compactMap { it.key }
-    }
-    }
-}
+        byAddedDate -> state.moviesState.moviesUserMeta
+            .filter { contains(it.key) }
+            .entries.sortedBy { it.value.addedToList ?: DateTime.now() > it.value.addedToList ?: DateTime.now() }
+            .map { it.key }
 
- */
+        byReleaseDate -> state.moviesState.movies.filter { this.contains(it.key) }
+            .entries.sortedBy { it.value.releaseDate ?: DateTime.now() > it.value.releaseDate ?: DateTime.now() }
+            .map { it.key }
+
+        byPopularity -> state.moviesState.movies.filter { this.contains(it.key) }
+            .entries
+            .sortedBy { it.value.popularity > it.value.popularity }
+            .map { it.key }
+
+        byScore -> state.moviesState.movies.filter { this.contains(it.key) }
+            .entries.sortedBy { it.value.vote_average > it.value.vote_average }
+            .map { it.key }
+    }
+

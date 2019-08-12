@@ -38,4 +38,24 @@ data class MoviesState(
                 CodingKeys.values().firstOrNull { it.rawValue == rawValue }
         }
     }
+
+    fun withMovieId(movieId: Int): Movie = movies[movieId]!!
+
+    fun withCrewId(crewId: Int) = withCrew[crewId] ?: listOf()
+
+    fun withListId(listId: Int) = customLists[listId]!!
+
+    fun withGenreId(genreId: Int) = withGenre[genreId]?.toIntArray() ?: intArrayOf()
+
+    fun search(searchText: String) = search[searchText]
+
+    val customListsList: List<CustomList>
+        get() = customLists.values.toList()
+
+    fun reviewByMovieId(movieId: Int): List<Review> = reviews[movieId]!!
+
+
+    fun recommendedMovies(movieId: Int): List<Movie> = recommended[movieId]!!.filter { movies.containsKey(it) }.mapNotNull { movies[it] }
+
+    fun similarMovies(movieId: Int): List<Movie> = similar[movieId]!!.filter { movies.containsKey(it) }.mapNotNull { movies[it] }
 }

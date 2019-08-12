@@ -29,4 +29,15 @@ data class PeoplesState(
                 CodingKeys.values().firstOrNull { it.rawValue == rawValue }
         }
     }
+
+    fun withPeopleId(peopleId: Int) = peoples[peopleId]
+
+    fun filterPeoples(predicate: (People) -> Boolean) = peoples.values.filter(predicate)
+
+    val characters
+        get() = peoples.values.filter { it.character != null }
+
+    val credits
+        get() = peoples.values.filter { it.department != null }
+
 }
