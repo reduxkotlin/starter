@@ -15,5 +15,5 @@ data class CustomList(
     val id: Int,
     var name: String,
     var cover: Int? = null,
-    var movies: Set<Int>
+    var movies: MutableSet<Int>
 )

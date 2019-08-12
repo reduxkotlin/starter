@@ -10,14 +10,14 @@ import com.example.common.models.People
 //  Copyright © 2019 Thomas Ricouard. All rights reserved.
 //
 data class PeoplesState(
-    var peoples: Map<Int, People> = mapOf(),
-    var peoplesMovies: Map<Int, List<Int>> = mapOf(),
-    var search: Map<String, List<Int>> = mapOf(),
+    var peoples: MutableMap<Int, People> = mutableMapOf(),
+    var peoplesMovies: MutableMap<Int, List<Int>> = mutableMapOf(),
+    var search: MutableMap<String, List<Int>> = mutableMapOf(),
     var popular: List<Int> = listOf(),
 /// [PeopleId: [MovieId:  Character]]
-    var casts: Map<Int, Map<Int, String>> = mapOf(),
+    var casts: MutableMap<Int, MutableMap<Int, String>> = mutableMapOf(),
 /// [PeopleId: [MovieId:  Character]]
-    var crews: Map<Int, Map<Int, String>> = mapOf(),
+    var crews: MutableMap<Int, MutableMap<Int, String>> = mutableMapOf(),
     var fanClub: Set<Int> = setOf()
 ) {
     enum class CodingKeys(val rawValue: String) {

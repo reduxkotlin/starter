@@ -39,6 +39,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     implementation "com.github.aakira:napier-android:$napierVersion"
+    implementation group: 'org.slf4j', name: 'slf4j-android', version: '1.7.26'
 
     implementation "io.ktor:ktor-client-okhttp:$ktorVersion"
     implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"

@@ -2,11 +2,9 @@ package com.example.common.actions
 
 import com.example.common.models.*
 import com.example.common.services.APIService
-import com.example.common.services.APIService.*
 import com.example.common.services.APIService.Endpoint.*
-import org.reduxkotlin.createThunk
-import kotlin.Result.Companion.success
-
+import com.example.common.thunk
+import com.github.aakira.napier.Napier
 
 //
 //  CastsAction.swift
@@ -16,102 +14,102 @@ import kotlin.Result.Companion.success
 //  Copyright © 2019 Thomas Ricouard. All rights reserved.
 //
 class PeopleActions {
-    /*
 
-    fun fetchDetail(people: Int) = createThunk { dispatch, getState, extraArgument ->
-            APIService.shared.GET(endpoint = personDetail(person = people), params = null) { result  ->
-                when (result) {
-                    success -> dispatch(SetDetail(person = result.response))
-                        failure -> break
-                }
-            }
+    fun fetchDetail(people: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<People>(
+            endpoint = personDetail(person = people),
+            params = null
+        ) {
+            onSuccess { dispatch(SetDetail(person = it)) }
+            onFailure { }
         }
+    }
 
     data class ImagesResponse(
         val id: Int,
-    val profiles: List<ImageData>)
+        val profiles: List<ImageData>
+    )
 
-    fun fetchImages(people: Int) = createThunk { dispatch, getState, extraArgument ->
-            APIService.shared.GET(endpoint = .personImages(person = people), params = null) { result  ->
-                when (result) {
-                    let .success(response) -> dispatch(SetImages(people = this.people, images = response.profiles))
-                        .failure -> break
-                }
-            }
+    fun fetchImages(people: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<ImagesResponse>(
+            endpoint = personImages(person = people),
+            params = null
+        ) {
+            onSuccess { dispatch(SetImages(people = people, images = it.profiles)) }
+            onFailure {}
         }
-        */
+    }
 
     data class PeopleCreditsResponse(
         val cast: List<Movie>?,
-    val crew: List<Movie>?)
+        val crew: List<Movie>?
+    )
 
-    /*
-    fun fetchPeopleCredits(people: Int) = createThunk { dispatch, getState, extraArgument ->
-            APIService.shared.GET(endpoint = .personMovieCredits(person = people), params = null) { result  ->
-                when (result) {
-                    let .success(response) -> dispatch(SetPeopleCredits(people = this.people, response = response))
-                        .failure -> break
-                }
-            }
+    fun fetchPeopleCredits(people: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<PeopleCreditsResponse>(
+            endpoint = personMovieCredits(person = people),
+            params = null
+        ) {
+            onSuccess { dispatch(SetPeopleCredits(people = people, response = it)) }
+            onFailure { }
         }
+    }
 
-    fun fetchMovieCasts(movie: Int) = createThunk { dispatch, getState, extraArgument ->
-            APIService.shared.GET(endpoint = .credits(movie = movie), params = null) { result  ->
-                when (result) {
-                    let .success(response) -> store.dispatch(action = SetMovieCasts(movie = movie, response = response))
-                        .failure -> break
-                }
-            }
+    fun fetchMovieCasts(movie: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<CastResponse>(endpoint = credits(movie = movie), params = null) {
+            onSuccess { dispatch(SetMovieCasts(movie = movie, response = it)) }
+            onFailure { }
         }
+    }
 
-    fun fetchSearch(query: String, page: Int) = createThunk { dispatch, getState, extraArgument ->
-            APIService.shared.GET(endpoint = .searchPerson, params = mapOf<"query" , query, "page" , "${page}">) { result  ->
-                when (result) {
-                    let .success(response) -> dispatch(SetSearch(query = this.query, page = this.page, response = response))
-                        .failure -> break
-                }
-            }
+    fun fetchSearch(query: String, page: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<PaginatedResponse<People>>(
+            endpoint = searchPerson,
+            params = mapOf("query" to query, "page" to page.toString())
+        ) {
+            onSuccess { dispatch(SetSearch(query = query, page = page, response = it)) }
+            onFailure {}
         }
+    }
 
-    fun fetchPopular(page: Int) = createThunk { dispatch, getState, extraArgument ->
-            APIService.shared.GET(endpoint = .popularPersons, params = mapOf<"page" , "${page}", "region" , AppUserDefaults.region>) { result  ->
-                when (result) {
-                    let .success(response) -> dispatch(SetPopular(page = this.page, response = response))
-                    let .failure(error) -> {
-                        print(error)
-                        break
-                    }
-                }
-            }
+    fun fetchPopular(page: Int) = thunk { dispatch, getState, extraArgument ->
+        APIService.shared.GET<PaginatedResponse<People>>(
+            endpoint = popularPersons,
+            params = mapOf("page" to "$page", "region" to "us")
+        ) {
+            onSuccess { dispatch(SetPopular(page = page, response = it)) }
+            onFailure { Napier.d(it.message ?: "error") }
         }
+    }
 
-     */
 
     data class SetDetail(val person: People)
 
     data class SetImages(
         val people: Int,
-    val images: List<ImageData>)
+        val images: List<ImageData>
+    )
 
     data class SetMovieCasts(
         val movie: Int,
-    val response: CastResponse
+        val response: CastResponse
     )
 
     data class SetSearch(
         val query: String,
-    val page: Int,
-    val response: PaginatedResponse<People>
+        val page: Int,
+        val response: PaginatedResponse<People>
     )
 
     data class SetPopular(
         val page: Int,
-    val response: PaginatedResponse<People>
+        val response: PaginatedResponse<People>
     )
 
     data class SetPeopleCredits(
         val people: Int,
-    val response: PeopleCreditsResponse)
+        val response: PeopleCreditsResponse
+    )
 
     data class AddToFanClub(val people: Int)
 

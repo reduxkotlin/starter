@@ -12,20 +12,21 @@ import com.example.common.state.PeoplesState
 //  Created by Thomas Ricouard on 09/06/2019.
 //  Copyright © 2019 Thomas Ricouard. All rights reserved.
 //
-fun peoplesStateReducer(state: PeoplesState, action: Any) : PeoplesState {
+fun peoplesStateReducer(state: PeoplesState, action: Any): PeoplesState {
     var state = state
-    /*
     when (action) {
         is PeopleActions.SetMovieCasts -> {
             state = mergePeople(peoples = action.response.cast, state = state)
             state = mergePeople(peoples = action.response.crew, state = state)
-            state.peoplesMovies[action.movie] = action.response.cast.map { it.id } + action.response.crew.map { it.id }
+            state.peoplesMovies[action.movie] =
+                action.response.cast.map { it.id } + action.response.crew.map { it.id }
         }
         is PeopleActions.SetSearch -> {
             if (action.page == 1) {
                 state.search[action.query] = action.response.results.map { it.id }
             } else {
-                state.search[action.query]?.append(contentsOf = action.response.results.map { it.id })
+                state.search[action.query] =
+                    state.search[action.query]!!.plus(action.response.results.map { it.id })
             }
             state = mergePeople(peoples = action.response.results, state = state)
         }
@@ -33,7 +34,7 @@ fun peoplesStateReducer(state: PeoplesState, action: Any) : PeoplesState {
             if (action.page == 1) {
                 state.popular = action.response.results.map { it.id }
             } else {
-                state.popular.append(contentsOf = action.response.results.map { it.id })
+                state.popular = state.popular.plus(action.response.results.map { it.id })
             }
             state = mergePeople(peoples = action.response.results, state = state)
         }
@@ -54,34 +55,35 @@ fun peoplesStateReducer(state: PeoplesState, action: Any) : PeoplesState {
             val cast = action.response.cast
             if (cast != null) {
                 if (state.casts[action.people] == null) {
-                    state.casts[action.people] = mapOf()
+                    state.casts[action.people] = mutableMapOf()
                 }
-                for (meta in cast where meta.character != null) {
-                    state.casts[action.people]!![meta.id] = meta.character!!
+                for (meta in cast) {
+                    if (meta.character != null) {
+                        state.casts[action.people]!![meta.id] = meta.character!!
+                    }
                 }
             }
             val crew = action.response.crew
             if (crew != null) {
                 if (state.crews[action.people] == null) {
-                    state.crews[action.people] = mapOf()
+                    state.crews[action.people] = mutableMapOf()
                 }
-                for (meta in crew where meta.department != null) {
-                    state.crews[action.people]!![meta.id] = meta.department!!
+                for (meta in crew) {
+                    if (meta.department != null) {
+                        state.crews[action.people]!![meta.id] = meta.department!!
+                    }
                 }
             }
         }
         is PeopleActions.SetImages -> state.peoples[action.people]?.images = action.images
-        is PeopleActions.AddToFanClub -> state.fanClub.insert(action.people)
-        is PeopleActions.RemoveFromFanClub -> state.fanClub.remove(action.people)
+        is PeopleActions.AddToFanClub -> state.fanClub = state.fanClub.plus(action.people)
+        is PeopleActions.RemoveFromFanClub -> state.fanClub = state.fanClub.minus(action.people)
         else -> state
     }
-
-     */
     return state
 }
 
-/*
-private fun mergePeople(peoples: List<People>, state: PeoplesState) : PeoplesState {
+private fun mergePeople(peoples: List<People>, state: PeoplesState): PeoplesState {
     var state = state
     for (people in peoples) {
         if (state.peoples[people.id] == null) {
@@ -90,5 +92,3 @@ private fun mergePeople(peoples: List<People>, state: PeoplesState) : PeoplesSta
     }
     return state
 }
-
- */

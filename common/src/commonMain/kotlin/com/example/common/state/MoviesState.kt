@@ -3,25 +3,25 @@ package com.example.common.state
 import com.example.common.models.*
 
 data class MoviesState(
-    var movies: Map<Int, Movie> = mapOf(),
-    var moviesList: Map<MoviesMenu, List<Int>> = mapOf(),
-    var recommended: Map<Int, List<Int>> = mapOf(),
-    var similar: Map<Int, List<Int>> = mapOf(),
-    var search: Map<String, List<Int>> = mapOf(),
-    var searchKeywords: Map<String, List<Keyword>> = mapOf(),
+    var movies: MutableMap<Int, Movie> = mutableMapOf(),
+    var moviesList: MutableMap<MoviesMenu, List<Int>> = mutableMapOf(),
+    var recommended: MutableMap<Int, List<Int>> = mutableMapOf(),
+    var similar: MutableMap<Int, List<Int>> = mutableMapOf(),
+    var search: MutableMap<String, MutableList<Int>> = mutableMapOf(),
+    var searchKeywords: MutableMap<String, List<Keyword>> = mutableMapOf(),
     var recentSearches: Set<String> = setOf(),
-    var moviesUserMeta: Map<Int, MovieUserMeta> = mapOf(),
-    var discover: List<Int> = listOf(),
+    var moviesUserMeta: MutableMap<Int, MovieUserMeta> = mutableMapOf(),
+    var discover: MutableList<Int> = mutableListOf(),
     var discoverFilter: DiscoverFilter? = null,
-    var savedDiscoverFilters: List<DiscoverFilter> = listOf(),
+    var savedDiscoverFilters: MutableList<DiscoverFilter> = mutableListOf(),
     var wishlist: Set<Int> = setOf(),
     var seenlist: Set<Int> = setOf(),
-    var withGenre: Map<Int, List<Int>> = mapOf(),
-    var withKeywords: Map<Int, List<Int>> = mapOf(),
-    var withCrew: Map<Int, List<Int>> = mapOf(),
-    var reviews: Map<Int, List<Review>> = mapOf(),
-    var customLists: Map<Int, CustomList> = mapOf(),
-    var genres: List<Genre> = listOf()
+    var withGenre: MutableMap<Int, MutableList<Int>> = mutableMapOf(),
+    var withKeywords: MutableMap<Int, MutableList<Int>> = mutableMapOf(),
+    var withCrew: MutableMap<Int, List<Int>> = mutableMapOf(),
+    var reviews: MutableMap<Int, List<Review>> = mutableMapOf(),
+    var customLists: MutableMap<Int, CustomList> = mutableMapOf(),
+    var genres: MutableList<Genre> = mutableListOf()
 ) {
     enum class CodingKeys(val rawValue: String) {
         movies("movies"),

@@ -14,6 +14,8 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.http.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 
@@ -40,7 +42,7 @@ class APIService(
 
     sealed class Endpoint {
         object popular : Endpoint()
-        object toRated : Endpoint()
+        object topRated : Endpoint()
         object upcoming : Endpoint()
         object nowPlaying : Endpoint()
         object trending : Endpoint()
@@ -63,7 +65,7 @@ class APIService(
         fun path(): String = when (this) {
             popular -> "movie/popular"
             is popularPersons -> "person/popular"
-            is toRated -> "movie/top_rated"
+            is topRated -> "movie/top_rated"
             is upcoming -> "movie/upcoming"
             is nowPlaying -> "movie/now_playing"
             is trending -> "trending/movie/day"
@@ -100,82 +102,34 @@ class APIService(
         }
     }
 
-    suspend inline fun <reified T> GET(
-        endpoint: APIService.Endpoint,
+    inline fun <reified T> GET(
+        endpoint: Endpoint,
         params: Map<String, String>?,
-        completionHandler: (Result<T>) -> Unit
+        crossinline completionHandler: (Result<T>).() -> Unit
     ) {
-
-
-//        Napier.d("URL: $url")
-        /*
-        val queryURL = baseURL.appendingPathComponent(endpoint.path())
-        val components = URLComponents(url = queryURL, resolvingAgainstBaseURL = true)!!
-        components.queryItems = listOf(
-            URLQueryItem(name = "api_key", value = apiKey),
-            URLQueryItem(name = "language", value = Locale.preferredLanguages[0])
-        )
-
-        val params = params
-        if (params != null) {
-            for ((_, value) in params.enumerated()) {
-                components.queryItems?.append(URLQueryItem(name = value.key, value = value.value))
-            }
-        }
-         */
-
-
-        Napier.d("BASE_URL = $baseURL")
-        try {
-            val response = client.get<T> {
-                apiUrl(endpoint.path())
-                parameter("api_key", apiKey)
-                parameter("language", getPreferredLanguage())
-                params?.forEach { parameter(it.key, it.value) }
-                Napier.d("URL: ${url.buildString()}")
-            }
-
-            completionHandler(Result.success(response))
-        } catch (e: Exception) {
-            completionHandler(Result.failure(e))
-        }
-
-        /*
-        val request = URLRequest(url = components.url!!)
-        request.httpMethod = "GET"
-        val task = URLSession.shared.dataTask(with = request) { data, response, error ->
-            val data = data
-            if (data == null) {
-                DispatchQueue.main.async { completionHandler(. failure (.noResponse)) }
-                return@dataTask
-            }
-            if (error != null) {
-                DispatchQueue.main.async { completionHandler(. failure (.networkError(error = error!!))) }
-                return@dataTask
-            }
-            do {
-                val
-
-                object = this.decoder.decode(T.self, from = data)
-                DispatchQueue.main.async { completionHandler(. success (object)) }
-            } catch val error {
-                DispatchQueue.main.async {
-                    #if DEBUG
-                    print("JSON Decoding Error: ${error}")
-                    #endif
-                    completionHandler(. failure (.jsonDecodingError(error = error)))
+        GlobalScope.launch {
+            Napier.d("BASE_URL = $baseURL")
+            try {
+                val response = client.get<T> {
+                    apiUrl(endpoint.path())
+                    parameter("api_key", apiKey)
+                    parameter("language", getPreferredLanguage())
+                    params?.forEach { parameter(it.key, it.value) }
+                    Napier.d("URL: ${url.buildString()}")
                 }
+
+                completionHandler(Result.success(response))
+            } catch (e: Exception) {
+                completionHandler(Result.failure(e))
             }
         }
-        task.resume()
-
-         */
     }
+
     fun HttpRequestBuilder.apiUrl(path: String) {
         header(HttpHeaders.CacheControl, io.ktor.client.utils.CacheControl.MAX_AGE)
         url {
             takeFrom(baseURL)
-            encodedPath = path
+            encodedPath = "/3/$path"
         }
     }
 }

@@ -24,20 +24,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         tv_message.text = helloWordText
-        val list = MoviesMenu.genres
+        val list = MoviesMenu.nowPlaying
         GlobalScope.launch {
             APIService.shared.GET<PaginatedResponse<Movie>>(
                 endpoint = APIService.Endpoint.discover,
-                params = mapOf("page" to "0", "region" to "en")
-            ) { result ->
-                if (result.isSuccess) {
+                params = mapOf("page" to "1", "region" to "us")
+            ) {
+                onSuccess {
                     MoviesActions.SetMovieMenuList(
-                        page = result.getOrNull()?.page!!,
+                        page = it.page!!,
                         list = list,
-                        response = result.getOrThrow()
+                        response = it
                     )
-                } else {
-                    Log.d("Test", result.exceptionOrNull()?.message)
+                }
+                onFailure {
+                    Log.d("Test", it.message)
                 }
             }
         }

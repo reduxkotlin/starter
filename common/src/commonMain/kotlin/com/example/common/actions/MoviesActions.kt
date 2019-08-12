@@ -1,9 +1,16 @@
 package com.example.common.actions
 
+import com.example.common.MoviesSort
 import com.example.common.models.*
 import com.example.common.services.APIService
+import com.example.common.services.APIService.*
 import com.example.common.state.AppState
 import com.example.common.state.MoviesMenu
+import com.example.common.thunk
+import com.github.aakira.napier.Napier
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import org.reduxkotlin.Thunk
 import org.reduxkotlin.createThunk
 import kotlin.Result.Companion.failure
@@ -19,253 +26,190 @@ import kotlin.Result.Companion.failure
 class MoviesActions {
     // MARK: - Requests
 
-    /*
-    fun FetchMoviesMenuList(list: MoviesMenu, page: Int): Thunk<AppState> =
-        createThunk { dispatch, getState, extraArgument ->
-            APIService.shared.GET<List<Movie>>(
-                endpoint = list.endpoint(),
-                params = mapOf("page", "${page}", "region" to AppUserDefaults.region)
-            ) { result ->
-                when (result) {
-                    success -> dispatch(
-                        SetMovieMenuList(
-                            page = this.page,
-                            list = this.list,
-                            response = response
-                        )
+    fun fetchMoviesMenuList(list: MoviesMenu, page: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<PaginatedResponse<Movie>>(
+            endpoint = list.endpoint,
+            params = mapOf(
+                "page" to page.toString(),
+                "region" to "us"
+            ) //AppUserDefaults.region)
+        ) {
+            onSuccess {
+                dispatch(
+                    SetMovieMenuList(
+                        page = page,
+                        list = list,
+                        response = it
                     )
-                    failure(error) -> {
-                        print(error)
-                        break
-                    }
-                }
+                )
             }
-        }
-
-    data class FetchDetail : AsyncAction(val movie: Int)
-    {
-
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            APIService.shared.GET(endpoint = . movieDetail (movie =
-                movie), params = mapOf<"append_to_response", "keywords,images", "include_image_language", "${Locale.current.languageCode ?: "en"},en,null">) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(
-                        SetDetail(
-                            movie = this.movie,
-                            response = response
-                        )
-                    )
-                        .failure
-                    -> break
-                }
+            onFailure {
+                Napier.d(it.message ?: "Error fetching")
             }
         }
     }
 
-    data class FetchRecommended : AsyncAction(val movie: Int)
-    {
+    fun fetchDetail(movie: Int) =
+        thunk { dispatch, _, _ ->
+            APIService.shared.GET<Movie>(
+                endpoint = Endpoint.movieDetail(movie = movie),
+                params = mapOf(
+                    "append_to_response" to "keywords,images", "include_image_language" to
+                            /*"${Locale.current.languageCode ?: */"en,en,null"
+                )
+            ) {
+                onSuccess { dispatch(SetDetail(movie = movie, response = it)) }
+                onFailure { }
+            }
+        }
 
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            APIService.shared.GET(endpoint = . recommended (movie =
-                movie), params = null) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(
-                        SetRecommended(
-                            movie = this.movie,
-                            response = response
-                        )
+    fun fetchRecommended(movie: Int) = thunk { dispatch, getState, extraArgument ->
+        APIService.shared.GET<PaginatedResponse<Movie>>(
+            endpoint = Endpoint.recommended(
+                movie = movie
+            ), params = null
+        ) {
+            onSuccess { dispatch(SetRecommended(movie = movie, response = it)) }
+            onFailure { }
+        }
+    }
+
+    fun fetchSimilar(movie: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<PaginatedResponse<Movie>>(
+            endpoint = Endpoint.similar(movie = movie),
+            params = null
+        ) {
+            onSuccess { dispatch(SetSimilar(movie = movie, response = it)) }
+            onFailure { }
+        }
+    }
+
+    fun fetchSearch(query: String, page: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<PaginatedResponse<Movie>>(
+            endpoint = Endpoint.searchMovie,
+            params = mapOf("query" to query, "page" to "${page}")
+        ) {
+            onSuccess {
+                dispatch(
+                    SetSearch(
+                        query = query,
+                        page = page,
+                        response = it
                     )
-                        .failure
-                    -> break
-                }
+                )
             }
+            onFailure { }
         }
     }
 
-    data class FetchSimilar : AsyncAction(val movie: Int)
-    {
-
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            APIService.shared.GET(endpoint = . similar (movie = movie), params = null) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(
-                        SetSimilar(
-                            movie = this.movie,
-                            response = response
-                        )
+    fun fetchSearchKeyword(query: String) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<PaginatedResponse<Keyword>>(
+            endpoint = Endpoint.searchKeyword,
+            params = mapOf("query" to query)
+        ) {
+            onSuccess {
+                dispatch(
+                    SetSearchKeyword(
+                        query = query,
+                        response = it
                     )
-                        .failure
-                    -> break
-                }
+                )
             }
+            onFailure { }
         }
     }
 
-    data class FetchSearch : AsyncAction(
-        val query: String,
-    val page: Int)
-    {
-
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            APIService.shared.GET(endpoint = . searchMovie, params = mapOf<"query", query, "page", "${page}">) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(
-                        SetSearch(
-                            query = this.query,
-                            page = this.page,
-                            response = response
-                        )
+    fun fetchMoviesGenre(genre: Genre, page: Int, sortBy: MoviesSort) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<PaginatedResponse<Movie>>(
+            endpoint = Endpoint.discover,
+            params = mapOf(
+                "with_genres" to "${genre.id}",
+                "page" to "$page",
+                "sort_by" to sortBy.sortByAPI
+            )
+        ) {
+            onSuccess {
+                dispatch(
+                    SetMovieForGenre(
+                        genre = genre,
+                        page = page,
+                        response = it
                     )
-                        .failure
-                    -> break
-                }
+                )
             }
+            onFailure { }
         }
     }
 
-    data class FetchSearchKeyword : AsyncAction(val query: String)
-    {
+    fun fetchMovieReviews(movie: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<PaginatedResponse<Review>>(
+            endpoint = Endpoint.review(
+                movie =
+                movie
+            ), params = mapOf("language" to "en-US")
+        ) {
+            onSuccess { dispatch(SetMovieReviews(movie = movie, response = it)) }
+            onFailure { }
+        }
+    }
 
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            APIService.shared.GET(endpoint = . searchKeyword, params = mapOf<"query", query>) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(
-                        SetSearchKeyword(
-                            query = this.query,
-                            response = response
-                        )
+    fun fetchMovieWithCrew(crew: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<PaginatedResponse<Movie>>(
+            endpoint = Endpoint.discover,
+            params = mapOf("with_people" to "$crew")
+        ) {
+            onSuccess { dispatch(SetMovieWithCrew(crew = crew, response = it)) }
+            onFailure { }
+        }
+    }
+
+    fun fetchMovieWithKeywords(keyword: Int, page: Int) = thunk { dispatch, _, _ ->
+        APIService.shared.GET<PaginatedResponse<Movie>>(
+            endpoint = Endpoint.discover, params = mapOf(
+                "page" to "$page",
+                "with_keywords" to "$keyword"
+            )
+        ) {
+            onSuccess {
+                dispatch(
+                    SetMovieWithKeyword(
+                        keyword = keyword,
+                        page = page,
+                        response = it
                     )
-                        .failure
-                    -> break
-                }
+                )
             }
+            onFailure { }
         }
     }
 
-    data class FetchMoviesGenre : AsyncAction(
-        val genre: Genre,
-    val page: Int,
-    val sortBy: MoviesSort)
-    {
-
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            APIService.shared.GET(endpoint = . discover, params = mapOf<"with_genres", "${genre.id}", "page", "${page}", "sort_by", sortBy.sortByAPI()>) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(
-                        SetMovieForGenre(
-                            genre = this.genre,
-                            page = this.page,
-                            response = response
-                        )
-                    )
-                        .failure
-                    -> break
-                }
+    fun fetchRandomDiscover(filter: DiscoverFilter? = null) = thunk { dispatch, _, _ ->
+        var filter = filter
+        if (filter == null) {
+            filter = DiscoverFilter.randomFilter()
+        }
+        APIService.shared.GET<PaginatedResponse<Movie>>(
+            endpoint = Endpoint.discover,
+            params = filter.toParams()
+        ) {
+            onSuccess {
+                dispatch(
+                    SetRandomDiscover(filter = filter, response = it)
+                )
             }
+            onFailure { }
         }
     }
 
-    data class FetchMovieReviews : AsyncAction(val movie: Int)
-    {
+    @Serializable
+    data class GenresResponse(val genres: List<Genre>)
 
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            APIService.shared.GET(endpoint = . review (movie =
-                movie), params = mapOf<"language", "en-US">) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(
-                        SetMovieReviews(
-                            movie = this.movie,
-                            response = response
-                        )
-                    )
-                        .failure
-                    -> break
-                }
-            }
+    fun fetchGenres() = thunk { dispatch, _, _ ->
+        APIService.shared.GET<GenresResponse>(endpoint = Endpoint.genres, params = null) {
+            onSuccess { dispatch(SetGenres(genres = it.genres)) }
+            onFailure { }
         }
     }
-
-    data class FetchMovieWithCrew : AsyncAction(val crew: Int)
-    {
-
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            APIService.shared.GET(endpoint = . discover, params = mapOf<"with_people", "${crew}">) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(
-                        SetMovieWithCrew(
-                            crew = this.crew,
-                            response = response
-                        )
-                    )
-                        .failure
-                    -> break
-                }
-            }
-        }
-    }
-
-    data class FetchMovieWithKeywords : AsyncAction(
-        val keyword: Int,
-    val page: Int)
-    {
-
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            APIService.shared.GET(endpoint = . discover, params = mapOf<"page", "${page}", "with_keywords", "${keyword}">) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(
-                        SetMovieWithKeyword(
-                            keyword = this.keyword,
-                            page = this.page,
-                            response = response
-                        )
-                    )
-                        .failure
-                    -> break
-                }
-            }
-        }
-    }
-
-    data class FetchRandomDiscover : AsyncAction(var filter: DiscoverFilter? = null)
-    {
-
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            var filter = this.filter
-            if (filter == null) {
-                filter = DiscoverFilter.randomFilter()
-            }
-            APIService.shared.GET(endpoint = . discover, params = filter!!.toParams()) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(
-                        SetRandomDiscover(
-                            filter = filter!!,
-                            response = response
-                        )
-                    )
-                        .failure
-                    -> break
-                }
-            }
-        }
-    }
-
-    data class GenresResponse : Codable(val genres: List<Genre>)
-    {}
-
-    data class FetchGenres : AsyncAction {
-
-        fun execute(state: FluxState?, dispatch: DispatchFunction) {
-            APIService.shared.GET(endpoint = . genres, params = null) { result ->
-                when (result) {
-                    let.success(response) -> dispatch(SetGenres(genres = response.genres))
-                        .failure
-                    -> break
-                }
-            }
-        }
-    }
-
-     */
 
     data class SetMovieMenuList(
         val page: Int,
@@ -342,7 +286,8 @@ class MoviesActions {
 
     data class SetRandomDiscover(
         val filter: DiscoverFilter,
-        val response: PaginatedResponse<Movie>)
+        val response: PaginatedResponse<Movie>
+    )
 
 
     data class PushRandomDiscover(val movie: Int)
@@ -351,26 +296,31 @@ class MoviesActions {
 
     data class SetMovieReviews(
         val movie: Int,
-    val response: PaginatedResponse<Review>)
+        val response: PaginatedResponse<Review>
+    )
 
     data class AddCustomList(val list: CustomList)
 
     data class EditCustomList(
         val list: Int,
-    val title: String?,
-    val cover: Int?)
+        val title: String?,
+        val cover: Int?
+    )
 
     data class AddMovieToCustomList(
         val list: Int,
-    val movie: Int)
+        val movie: Int
+    )
 
     data class AddMoviesToCustomList(
         val list: Int,
-    val movies: List<Int>)
+        val movies: List<Int>
+    )
 
     data class RemoveMovieFromCustomList(
         val list: Int,
-    val movie: Int)
+        val movie: Int
+    )
 
     data class RemoveCustomList(val list: Int)
 
