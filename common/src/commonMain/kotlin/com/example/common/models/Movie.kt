@@ -15,7 +15,7 @@ import kotlinx.serialization.Transient
 //
 @Serializable
 data class Movie(
-    val id: Int,
+    val id: String,
     val original_title: String,
     val title: String,
     val overview: String,
@@ -62,7 +62,7 @@ data class Movie(
 }
 
 val sampleMovie = Movie(
-    id = 0,
+    id = "0",
     original_title = "Test movie Test movie Test movie Test movie Test movie Test movie Test movie ",
     title = "Test movie Test movie Test movie Test movie Test movie Test movie Test movie  Test movie Test movie Test movie",
     overview = "Test desc",

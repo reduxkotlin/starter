@@ -45,7 +45,7 @@ data class MoviesState(
 
     fun withListId(listId: Int) = customLists[listId]!!
 
-    fun withGenreId(genreId: Int) = withGenre[genreId]?.toIntArray() ?: intArrayOf()
+    fun withGenreId(genreId: Int): List<Int> = withGenre[genreId] ?: listOf()
 
     fun search(searchText: String) = search[searchText]
 

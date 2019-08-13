@@ -5,9 +5,9 @@ import com.example.common.models.People
 import com.example.common.state.AppState
 import org.reduxkotlin.Dispatcher
 
-typealias PropsMapper =(AppState, Dispatcher) -> Props
+typealias PropsMapper<Props> =(AppState, Dispatcher) -> Props
 
-data class Props(
+data class MovieDetailProps(
     val movie: Movie,
     val characters: List<People>?,
     val credits: List<People>?,
@@ -17,8 +17,8 @@ data class Props(
 
 
 
-fun movieDetailMapProps(movieId: Int): PropsMapper {
-    fun map(state: AppState, dispatch: Dispatcher): Props {
+fun movieDetailMapProps(movieId: Int): PropsMapper<MovieDetailProps> {
+    fun map(state: AppState, dispatch: Dispatcher): MovieDetailProps {
         var characters: List<People>? = null
         var credits: List<People>? = null
         var recommended: List<Movie>? = null
@@ -39,7 +39,7 @@ fun movieDetailMapProps(movieId: Int): PropsMapper {
                 similar = simillarIds.filter { movies[it] != null }.map { movies[it]!! }
             }
         }
-        return Props(
+        return MovieDetailProps(
             movie = state.moviesState.movies[movieId]!!,
             characters = characters,
             credits = credits,
