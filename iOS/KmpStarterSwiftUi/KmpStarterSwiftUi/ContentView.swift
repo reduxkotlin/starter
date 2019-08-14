@@ -8,10 +8,13 @@
 
 import SwiftUI
 import common
-
+let store = StoreKt.createStore()
 struct ContentView: View {
     var body: some View {
-        return Text(KmpStarterAppKt.helloWordText)
+        VStack {
+            Text("\(AppStateKt.allMovieMenuValues().compactMap({($0 as MoviesMenu).title}).first!)")
+            Text("Hello \(store.state!.description())")
+        }
     }
 }
 

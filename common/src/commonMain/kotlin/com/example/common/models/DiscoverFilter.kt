@@ -16,7 +16,7 @@ data class DiscoverFilter(
     val startYear: Int?,
     val endYear: Int?,
     val sort: String,
-    val genre: Int?,
+    val genre: String?,
     val region: String?
 ) {
     companion object {

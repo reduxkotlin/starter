@@ -23,11 +23,11 @@ import kotlin.Result.Companion.failure
 //  Created by Thomas Ricouard on 06/06/2019.
 //  Copyright © 2019 Thomas Ricouard. All rights reserved.
 //
-class MoviesActions {
+class MoviesActions(private val apiService: APIService) {
     // MARK: - Requests
 
     fun fetchMoviesMenuList(list: MoviesMenu, page: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<PaginatedResponse<Movie>>(
+        apiService.GET<MoviePaginatedResponse>(
             endpoint = list.endpoint,
             params = mapOf(
                 "page" to page.toString(),
@@ -49,9 +49,9 @@ class MoviesActions {
         }
     }
 
-    fun fetchDetail(movie: Int) =
+    fun fetchDetail(movie: String) =
         thunk { dispatch, _, _ ->
-            APIService.shared.GET<Movie>(
+            apiService.GET<Movie>(
                 endpoint = Endpoint.movieDetail(movie = movie),
                 params = mapOf(
                     "append_to_response" to "keywords,images", "include_image_language" to
@@ -63,8 +63,8 @@ class MoviesActions {
             }
         }
 
-    fun fetchRecommended(movie: Int) = thunk { dispatch, getState, extraArgument ->
-        APIService.shared.GET<PaginatedResponse<Movie>>(
+    fun fetchRecommended(movie: String) = thunk { dispatch, _, _ ->
+        apiService.GET<MoviePaginatedResponse>(
             endpoint = Endpoint.recommended(
                 movie = movie
             ), params = null
@@ -74,8 +74,8 @@ class MoviesActions {
         }
     }
 
-    fun fetchSimilar(movie: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<PaginatedResponse<Movie>>(
+    fun fetchSimilar(movie: String) = thunk { dispatch, _, _ ->
+        apiService.GET<MoviePaginatedResponse>(
             endpoint = Endpoint.similar(movie = movie),
             params = null
         ) {
@@ -85,7 +85,7 @@ class MoviesActions {
     }
 
     fun fetchSearch(query: String, page: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<PaginatedResponse<Movie>>(
+        apiService.GET<MoviePaginatedResponse>(
             endpoint = Endpoint.searchMovie,
             params = mapOf("query" to query, "page" to "${page}")
         ) {
@@ -103,7 +103,7 @@ class MoviesActions {
     }
 
     fun fetchSearchKeyword(query: String) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<PaginatedResponse<Keyword>>(
+        apiService.GET<KeywordPaginatedResponse>(
             endpoint = Endpoint.searchKeyword,
             params = mapOf("query" to query)
         ) {
@@ -120,7 +120,7 @@ class MoviesActions {
     }
 
     fun fetchMoviesGenre(genre: Genre, page: Int, sortBy: MoviesSort) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<PaginatedResponse<Movie>>(
+        apiService.GET<MoviePaginatedResponse>(
             endpoint = Endpoint.discover,
             params = mapOf(
                 "with_genres" to "${genre.id}",
@@ -141,8 +141,8 @@ class MoviesActions {
         }
     }
 
-    fun fetchMovieReviews(movie: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<PaginatedResponse<Review>>(
+    fun fetchMovieReviews(movie: String) = thunk { dispatch, _, _ ->
+        apiService.GET<ReviewPaginatedResponse>(
             endpoint = Endpoint.review(
                 movie =
                 movie
@@ -153,8 +153,8 @@ class MoviesActions {
         }
     }
 
-    fun fetchMovieWithCrew(crew: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<PaginatedResponse<Movie>>(
+    fun fetchMovieWithCrew(crew: String) = thunk { dispatch, _, _ ->
+        apiService.GET<MoviePaginatedResponse>(
             endpoint = Endpoint.discover,
             params = mapOf("with_people" to "$crew")
         ) {
@@ -163,8 +163,8 @@ class MoviesActions {
         }
     }
 
-    fun fetchMovieWithKeywords(keyword: Int, page: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<PaginatedResponse<Movie>>(
+    fun fetchMovieWithKeywords(keyword: String, page: Int) = thunk { dispatch, _, _ ->
+        apiService.GET<MoviePaginatedResponse>(
             endpoint = Endpoint.discover, params = mapOf(
                 "page" to "$page",
                 "with_keywords" to "$keyword"
@@ -188,7 +188,7 @@ class MoviesActions {
         if (filter == null) {
             filter = DiscoverFilter.randomFilter()
         }
-        APIService.shared.GET<PaginatedResponse<Movie>>(
+        apiService.GET<MoviePaginatedResponse>(
             endpoint = Endpoint.discover,
             params = filter.toParams()
         ) {
@@ -205,7 +205,7 @@ class MoviesActions {
     data class GenresResponse(val genres: List<Genre>)
 
     fun fetchGenres() = thunk { dispatch, _, _ ->
-        APIService.shared.GET<GenresResponse>(endpoint = Endpoint.genres, params = null) {
+        apiService.GET<GenresResponse>(endpoint = Endpoint.genres, params = null) {
             onSuccess { dispatch(SetGenres(genres = it.genres)) }
             onFailure { Napier.d(it.message ?: "Failure fetching Genres")}
         }
@@ -214,28 +214,28 @@ class MoviesActions {
     data class SetMovieMenuList(
         val page: Int,
         val list: MoviesMenu,
-        val response: PaginatedResponse<Movie>
+        val response: MoviePaginatedResponse
     )
 
     data class SetDetail(
-        val movie: Int,
+        val movie: String,
         val response: Movie
     )
 
     data class SetRecommended(
-        val movie: Int,
-        val response: PaginatedResponse<Movie>
+        val movie: String,
+        val response: MoviePaginatedResponse
     )
 
 
     data class SetSimilar(
-        val movie: Int,
-        val response: PaginatedResponse<Movie>
+        val movie: String,
+        val response: MoviePaginatedResponse
     )
 
 
     data class KeywordResponse(
-        val id: Int,
+        val id: String,
         val keywords: List<Keyword>
     )
 
@@ -243,7 +243,7 @@ class MoviesActions {
     data class SetSearch(
         val query: String,
         val page: Int,
-        val response: PaginatedResponse<Movie>
+        val response: MoviePaginatedResponse
     )
 
 
@@ -252,77 +252,77 @@ class MoviesActions {
 
     data class SetSearchKeyword(
         val query: String,
-        val response: PaginatedResponse<Keyword>
+        val response: KeywordPaginatedResponse
     )
 
 
-    data class AddToWishlist(val movie: Int)
+    data class AddToWishlist(val movie: String)
 
 
-    data class RemoveFromWishlist(val movie: Int)
+    data class RemoveFromWishlist(val movie: String)
 
-    data class AddToSeenList(val movie: Int)
+    data class AddToSeenList(val movie: String)
 
-    data class RemoveFromSeenList(val movie: Int)
+    data class RemoveFromSeenList(val movie: String)
 
     data class SetMovieForGenre(
         val genre: Genre,
         val page: Int,
-        val response: PaginatedResponse<Movie>
+        val response: MoviePaginatedResponse
     )
 
     data class SetMovieWithCrew(
-        val crew: Int,
-        val response: PaginatedResponse<Movie>
+        val crew: String,
+        val response: MoviePaginatedResponse
     )
 
     data class SetMovieWithKeyword(
-        val keyword: Int,
+        val keyword: String,
         val page: Int,
-        val response: PaginatedResponse<Movie>
+        val response: MoviePaginatedResponse
     )
 
     class ResetRandomDiscover
 
     data class SetRandomDiscover(
         val filter: DiscoverFilter,
-        val response: PaginatedResponse<Movie>
+        val response: MoviePaginatedResponse
     )
 
 
-    data class PushRandomDiscover(val movie: Int)
+    data class PushRandomDiscover(val movie: String)
 
     class PopRandromDiscover
 
     data class SetMovieReviews(
-        val movie: Int,
-        val response: PaginatedResponse<Review>
+        val movie: String,
+        val response: ReviewPaginatedResponse
     )
 
     data class AddCustomList(val list: CustomList)
 
     data class EditCustomList(
-        val list: Int,
+        val list: String,
         val title: String?,
-        val cover: Int?
+        val cover: String?
     )
 
     data class AddMovieToCustomList(
-        val list: Int,
-        val movie: Int
+        val list: String,
+        val movie: String
     )
 
     data class AddMoviesToCustomList(
-        val list: Int,
-        val movies: List<Int>
+        val list: String,
+        val movies: List<String>
     )
 
     data class RemoveMovieFromCustomList(
-        val list: Int,
-        val movie: Int
+        val list: String,
+        val movie: String
     )
 
-    data class RemoveCustomList(val list: Int)
+    data class RemoveCustomList(val list: String)
 
     data class SaveDiscoverFilter(val filter: DiscoverFilter)
 

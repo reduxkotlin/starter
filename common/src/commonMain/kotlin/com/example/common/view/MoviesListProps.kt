@@ -6,10 +6,12 @@ import org.reduxkotlin.Dispatcher
 
 
 data class MoviesListProps(
-    val searchedMovies: List<Int>?,
+    val searchedMovies: List<String>?,
     val searchedKeywords: List<Keyword>?,
-    val searcherdPeoples: List<Int>?,
-    val recentSearches: List<String>)
+    val searchedPeoples: List<String>?,
+    val recentSearches: List<String>) {
+    fun isEmptySearch() = searchedPeoples?.isEmpty() == true
+}
 
 
 fun moviesListProps(searchText: String, isSearching: Boolean): PropsMapper<MoviesListProps> {
@@ -19,13 +21,13 @@ fun moviesListProps(searchText: String, isSearching: Boolean): PropsMapper<Movie
             return MoviesListProps(
                 searchedMovies = x,
                 searchedKeywords = state.moviesState.searchKeywords[searchText]?.take(5)?.map { it },
-                searcherdPeoples = state.peoplesState.search[searchText],
+                searchedPeoples = state.peoplesState.search[searchText],
                 recentSearches = state.moviesState.recentSearches.map { it })
         }
         return MoviesListProps(
             searchedMovies = null,
             searchedKeywords = null,
-            searcherdPeoples = null,
+            searchedPeoples = null,
             recentSearches = listOf()
         )
     }

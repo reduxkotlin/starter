@@ -12,6 +12,6 @@ import kotlinx.serialization.Serializable
 //
 @Serializable
 data class Keyword(
-    val id: Int,
+    val id: String,
     val name: String
 )

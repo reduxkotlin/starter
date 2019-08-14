@@ -17,7 +17,7 @@ data class MovieDetailProps(
 
 
 
-fun movieDetailMapProps(movieId: Int): PropsMapper<MovieDetailProps> {
+fun movieDetailMapProps(movieId: String): PropsMapper<MovieDetailProps> {
     fun map(state: AppState, dispatch: Dispatcher): MovieDetailProps {
         var characters: List<People>? = null
         var credits: List<People>? = null

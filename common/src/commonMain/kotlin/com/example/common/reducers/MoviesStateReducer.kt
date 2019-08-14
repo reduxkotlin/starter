@@ -132,7 +132,7 @@ fun moviesStateReducer(state: MoviesState, action: Any) : MoviesState {
         }
         is MoviesActions.SetGenres -> {
             state.genres = action.genres.toMutableList()
-            state.genres.add(0, Genre(id = -1, name = "Random"))
+            state.genres.add(0, Genre(id = "-1", name = "Random"))
         }
         is PeopleActions.SetPeopleCredits -> {
             val crews = action.response.crew
@@ -152,7 +152,7 @@ fun moviesStateReducer(state: MoviesState, action: Any) : MoviesState {
     return state
 }
 
-operator fun MutableMap<Int, Movie>.plusAssign(rhs: List<Movie>) {
+operator fun MutableMap<String, Movie>.plusAssign(rhs: List<Movie>) {
     for (movie in rhs) {
         this[movie.id] = movie
     }

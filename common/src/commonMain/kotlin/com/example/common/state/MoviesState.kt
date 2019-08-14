@@ -3,24 +3,24 @@ package com.example.common.state
 import com.example.common.models.*
 
 data class MoviesState(
-    var movies: MutableMap<Int, Movie> = mutableMapOf(),
-    var moviesList: MutableMap<MoviesMenu, List<Int>> = mutableMapOf(),
-    var recommended: MutableMap<Int, List<Int>> = mutableMapOf(),
-    var similar: MutableMap<Int, List<Int>> = mutableMapOf(),
-    var search: MutableMap<String, MutableList<Int>> = mutableMapOf(),
+    var movies: MutableMap<String, Movie> = mutableMapOf(),
+    var moviesList: MutableMap<MoviesMenu, List<String>> = mutableMapOf(),
+    var recommended: MutableMap<String, List<String>> = mutableMapOf(),
+    var similar: MutableMap<String, List<String>> = mutableMapOf(),
+    var search: MutableMap<String, MutableList<String>> = mutableMapOf(),
     var searchKeywords: MutableMap<String, List<Keyword>> = mutableMapOf(),
     var recentSearches: Set<String> = setOf(),
-    var moviesUserMeta: MutableMap<Int, MovieUserMeta> = mutableMapOf(),
-    var discover: MutableList<Int> = mutableListOf(),
+    var moviesUserMeta: MutableMap<String, MovieUserMeta> = mutableMapOf(),
+    var discover: MutableList<String> = mutableListOf(),
     var discoverFilter: DiscoverFilter? = null,
     var savedDiscoverFilters: MutableList<DiscoverFilter> = mutableListOf(),
-    var wishlist: Set<Int> = setOf(),
-    var seenlist: Set<Int> = setOf(),
-    var withGenre: MutableMap<Int, MutableList<Int>> = mutableMapOf(),
-    var withKeywords: MutableMap<Int, MutableList<Int>> = mutableMapOf(),
-    var withCrew: MutableMap<Int, List<Int>> = mutableMapOf(),
-    var reviews: MutableMap<Int, List<Review>> = mutableMapOf(),
-    var customLists: MutableMap<Int, CustomList> = mutableMapOf(),
+    var wishlist: Set<String> = setOf(),
+    var seenlist: Set<String> = setOf(),
+    var withGenre: MutableMap<String, MutableList<String>> = mutableMapOf(),
+    var withKeywords: MutableMap<String, MutableList<String>> = mutableMapOf(),
+    var withCrew: MutableMap<String, List<String>> = mutableMapOf(),
+    var reviews: MutableMap<String, List<Review>> = mutableMapOf(),
+    var customLists: MutableMap<String, CustomList> = mutableMapOf(),
     var genres: MutableList<Genre> = mutableListOf()
 ) {
     enum class CodingKeys(val rawValue: String) {
@@ -39,23 +39,27 @@ data class MoviesState(
         }
     }
 
-    fun withMovieId(movieId: Int): Movie = movies[movieId]!!
+    fun withMovieId(movieId: String): Movie = movies[movieId]!!
 
-    fun withCrewId(crewId: Int) = withCrew[crewId] ?: listOf()
+    fun withCrewId(crewId: String) = withCrew[crewId] ?: listOf()
 
-    fun withListId(listId: Int) = customLists[listId]!!
+    fun withListId(listId: String) = customLists[listId]
 
-    fun withGenreId(genreId: Int): List<Int> = withGenre[genreId] ?: listOf()
+    fun withKeywordId(keywordId: String) = withKeywords[keywordId]!!.toList()
 
-    fun search(searchText: String) = search[searchText]
+    fun withGenreId(genreId: String): List<String> = withGenre[genreId] ?: listOf()
+
+    fun getGenreById(genreId: String) = genres.find { it.id == genreId }
+
+    fun search(searchText: String) = search[searchText]?.toList()
 
     val customListsList: List<CustomList>
         get() = customLists.values.toList()
 
-    fun reviewByMovieId(movieId: Int): List<Review> = reviews[movieId]!!
+    fun reviewByMovieId(movieId: String): List<Review>? = reviews[movieId]
 
 
-    fun recommendedMovies(movieId: Int): List<Movie> = recommended[movieId]!!.filter { movies.containsKey(it) }.mapNotNull { movies[it] }
+    fun recommendedMovies(movieId: String): List<Movie>? = recommended[movieId]?.filter { movies.containsKey(it) }?.mapNotNull { movies[it] }
 
-    fun similarMovies(movieId: Int): List<Movie> = similar[movieId]!!.filter { movies.containsKey(it) }.mapNotNull { movies[it] }
+    fun similarMovies(movieId: String): List<Movie>? = similar[movieId]?.filter { movies.containsKey(it) }?.mapNotNull { movies[it] }
 }

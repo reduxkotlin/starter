@@ -5,6 +5,7 @@ import com.example.common.services.APIService
 import com.example.common.services.APIService.Endpoint.*
 import com.example.common.thunk
 import com.github.aakira.napier.Napier
+import kotlinx.serialization.Serializable
 
 //
 //  CastsAction.swift
@@ -13,10 +14,10 @@ import com.github.aakira.napier.Napier
 //  Created by Thomas Ricouard on 09/06/2019.
 //  Copyright © 2019 Thomas Ricouard. All rights reserved.
 //
-class PeopleActions {
+class PeopleActions(private val apiService: APIService) {
 
-    fun fetchDetail(people: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<People>(
+    fun fetchDetail(people: String) = thunk { dispatch, _, _ ->
+        apiService.GET<People>(
             endpoint = personDetail(person = people),
             params = null
         ) {
@@ -25,13 +26,14 @@ class PeopleActions {
         }
     }
 
+    @Serializable
     data class ImagesResponse(
         val id: Int,
         val profiles: List<ImageData>
     )
 
-    fun fetchImages(people: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<ImagesResponse>(
+    fun fetchImages(people: String) = thunk { dispatch, _, _ ->
+        apiService.GET<ImagesResponse>(
             endpoint = personImages(person = people),
             params = null
         ) {
@@ -40,13 +42,14 @@ class PeopleActions {
         }
     }
 
+    @Serializable
     data class PeopleCreditsResponse(
         val cast: List<Movie>?,
         val crew: List<Movie>?
     )
 
-    fun fetchPeopleCredits(people: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<PeopleCreditsResponse>(
+    fun fetchPeopleCredits(people: String) = thunk { dispatch, _, _ ->
+        apiService.GET<PeopleCreditsResponse>(
             endpoint = personMovieCredits(person = people),
             params = null
         ) {
@@ -55,15 +58,15 @@ class PeopleActions {
         }
     }
 
-    fun fetchMovieCasts(movie: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<CastResponse>(endpoint = credits(movie = movie), params = null) {
+    fun fetchMovieCasts(movie: String) = thunk { dispatch, _, _ ->
+        apiService.GET<CastResponse>(endpoint = credits(movie = movie), params = null) {
             onSuccess { dispatch(SetMovieCasts(movie = movie, response = it)) }
             onFailure { }
         }
     }
 
     fun fetchSearch(query: String, page: Int) = thunk { dispatch, _, _ ->
-        APIService.shared.GET<PaginatedResponse<People>>(
+        apiService.GET<PeoplePaginatedResponse>(
             endpoint = searchPerson,
             params = mapOf("query" to query, "page" to page.toString())
         ) {
@@ -73,7 +76,7 @@ class PeopleActions {
     }
 
     fun fetchPopular(page: Int) = thunk { dispatch, getState, extraArgument ->
-        APIService.shared.GET<PaginatedResponse<People>>(
+        apiService.GET<PeoplePaginatedResponse>(
             endpoint = popularPersons,
             params = mapOf("page" to "$page", "region" to "us")
         ) {
@@ -86,32 +89,32 @@ class PeopleActions {
     data class SetDetail(val person: People)
 
     data class SetImages(
-        val people: Int,
+        val people: String,
         val images: List<ImageData>
     )
 
     data class SetMovieCasts(
-        val movie: Int,
+        val movie: String,
         val response: CastResponse
     )
 
     data class SetSearch(
         val query: String,
         val page: Int,
-        val response: PaginatedResponse<People>
+        val response: PeoplePaginatedResponse
     )
 
     data class SetPopular(
         val page: Int,
-        val response: PaginatedResponse<People>
+        val response: PeoplePaginatedResponse
     )
 
     data class SetPeopleCredits(
-        val people: Int,
+        val people: String,
         val response: PeopleCreditsResponse
     )
 
-    data class AddToFanClub(val people: Int)
+    data class AddToFanClub(val people: String)
 
-    data class RemoveFromFanClub(val people: Int)
+    data class RemoveFromFanClub(val people: String)
 }

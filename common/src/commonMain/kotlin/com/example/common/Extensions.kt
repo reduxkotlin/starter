@@ -13,7 +13,7 @@ enum class MoviesSort(val title: String, val sortByAPI: String) {
 
 //FIXME: @SwiftKotlin - Kotlin does not support where clauses in extensions:  where Iterator.Element == Int
 
-fun List<Int>.sortedMoviesIds(by: MoviesSort, state: AppState): List<Int> =
+fun Collection<String>.sortedMoviesIds(by: MoviesSort, state: AppState): List<String> =
     when (by) {
         byAddedDate -> state.moviesState.moviesUserMeta
             .filter { contains(it.key) }

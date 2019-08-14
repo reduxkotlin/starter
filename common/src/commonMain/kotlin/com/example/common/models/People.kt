@@ -12,27 +12,27 @@ import kotlinx.serialization.Serializable
 //
 @Serializable
 data class People(
-    val id: Int,
+    val id: String,
     val name: String,
     var character: String? = null,
     var department: String? = null,
-    val profile_path: String?,
-    val known_for_department: String?,
+    val profile_path: String? = null,
+    val known_for_department: String? = null,
     var known_for: List<KnownFor>? = null,
-    val also_known_as: List<String>?,
-    val birthDay: String?,
-    val deathDay: String?,
-    val place_of_birth: String?,
-    val biography: String?,
-    val popularity: Double?,
+    val also_known_as: List<String>? = null,
+    val birthDay: String? = null,
+    val deathDay: String? = null,
+    val place_of_birth: String? = null,
+    val biography: String? = null,
+    val popularity: Double? = null,
     var images: List<ImageData>? = null
 ) {
 
     @Serializable
     data class KnownFor(
-        val id: Int,
-        val original_title: String?,
-        val poster_path: String?
+        val id: String,
+        val original_title: String? = null,
+        val poster_path: String? = null
     )
 }
 

@@ -4,8 +4,8 @@ apply plugin: 'kotlinx-serialization'
 apply plugin: 'co.touchlab.kotlinxcodesync'
 
 xcode {
-    projectPath = "../iOS/KmpStarter/KmpStarter.xcodeproj"
-    target = "KmpStarter"
+    projectPath = "../iOS/MovieSwiftUI/MovieSwift/MovieSwift.xcodeproj"
+    target = "MovieSwiftUI"
 }
 
 

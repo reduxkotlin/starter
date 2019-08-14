@@ -10,15 +10,15 @@ import com.example.common.models.People
 //  Copyright © 2019 Thomas Ricouard. All rights reserved.
 //
 data class PeoplesState(
-    var peoples: MutableMap<Int, People> = mutableMapOf(),
-    var peoplesMovies: MutableMap<Int, List<Int>> = mutableMapOf(),
-    var search: MutableMap<String, List<Int>> = mutableMapOf(),
-    var popular: List<Int> = listOf(),
+    var peoples: MutableMap<String, People> = mutableMapOf(),
+    var peoplesMovies: MutableMap<String, List<String>> = mutableMapOf(),
+    var search: MutableMap<String, List<String>> = mutableMapOf(),
+    var popular: List<String> = listOf(),
 /// [PeopleId: [MovieId:  Character]]
-    var casts: MutableMap<Int, MutableMap<Int, String>> = mutableMapOf(),
+    var casts: MutableMap<String, MutableMap<String, String>> = mutableMapOf(),
 /// [PeopleId: [MovieId:  Character]]
-    var crews: MutableMap<Int, MutableMap<Int, String>> = mutableMapOf(),
-    var fanClub: Set<Int> = setOf()
+    var crews: MutableMap<String, MutableMap<String, String>> = mutableMapOf(),
+    var fanClub: Set<String> = setOf()
 ) {
     enum class CodingKeys(val rawValue: String) {
         peoples("peoples"),
@@ -30,7 +30,11 @@ data class PeoplesState(
         }
     }
 
-    fun withPeopleId(peopleId: Int) = peoples[peopleId]
+    fun crewsByPeopleId(peopleId: String): Map<String, String> = crews[peopleId] ?: mapOf()
+
+    fun castsByPeopleId(peopleId: String): Map<String, String> = casts[peopleId] ?: mapOf()
+
+    fun withPeopleId(peopleId: String) = peoples[peopleId]
 
     fun filterPeoples(predicate: (People) -> Boolean) = peoples.values.filter(predicate)
 
