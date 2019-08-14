@@ -1,7 +1,10 @@
 package com.example.common.models
 
 import com.benasher44.uuid.Uuid
+import com.soywiz.klock.DateFormat
 import com.soywiz.klock.DateTime
+import com.soywiz.klock.DateTimeTz
+import com.soywiz.klock.parse
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -25,11 +28,6 @@ data class Movie(
     val vote_average: Float,
     val vote_count: Int,
     val release_date: String? = null,
-//val dateFormatter: DateFormatter = {
-//    val formatter = DateFormatter()
-//    formatter.dateFormat = "yyy-MM-dd"
-//    formatter
-//}(),
     val genres: List<Genre>? = null,
     val runtime: Int? = null,
     val status: String? = null,
@@ -39,10 +37,12 @@ data class Movie(
     var character: String? = null,
     var department: String? = null
 ) {
+    private val dateFormatter: DateFormat by lazy { DateFormat("yyyy-MM-dd") }
+
     val userTitle: String
-        get() = "" //TODO if (AppUserDefaults.alwaysOriginalTitle) original_title else title
-    val releaseDate: DateTime?
-        get() = null //TODO if (release_date != null) Movie.dateFormatter.date(from = release_date!!) else DateTime.now()
+        get() = original_title //TODO if (AppUserDefaults.alwaysOriginalTitle) original_title else title
+    val releaseDate: DateTimeTz
+        get() = if (release_date != null) dateFormatter.parse(release_date!!) else DateTimeTz.nowLocal()
 
     @Serializable
     data class Keywords(val keywords: List<Keyword>? = null)
@@ -72,7 +72,7 @@ val sampleMovie = Movie(
     vote_average = 8.9f,
     vote_count = 1000,
     release_date = "1972-03-14",
-    genres = listOf( Genre(id = "0", name = "test")),
+    genres = listOf(Genre(id = "0", name = "test")),
     runtime = 80,
     status = "released"
 )

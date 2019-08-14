@@ -75,7 +75,7 @@ class APIService(
             is upcoming -> "movie/upcoming"
             is nowPlaying -> "movie/now_playing"
             is trending -> "trending/movie/day"
-            is movieDetail -> "movie/$this.movie}"
+            is movieDetail -> "movie/$movie"
             is personDetail -> "person/$person}"
             is credits -> "movie/$movie/credits"
             is review -> "movie/$movie/reviews"

@@ -1,6 +1,9 @@
 package com.example.common.models
 
+import com.soywiz.klock.DateTime
 import kotlinx.serialization.Serializable
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 
 //
@@ -21,6 +24,8 @@ data class DiscoverFilter(
 ) {
     companion object {
 
+        private fun random() = Random(DateTime.now().unixMillisLong)
+
         fun randomFilter(): DiscoverFilter =
             DiscoverFilter(
                 year = randomYear(),
@@ -31,28 +36,15 @@ data class DiscoverFilter(
                 region = null
             )
 
-        fun randomYear(): Int {
-            /*
-            val calendar = Calendar.current
-            random()
-            return random(in = 1950 until calendar.component(. year, from = Date()))
-
-             */
-            return 0
-        }
+        fun randomYear(): Int = random().nextInt(range = 1950 until DateTime.now().yearInt)
 
         fun randomSort(): String {
-            /*
             val sortBy =
                 listOf("popularity.desc", "popularity.asc", "vote_average.asc", "vote_average.desc")
-            return sortBy[Int.random(in = 0 until sortBy.size)]
-
-             */
-            return ""
+            return sortBy[random().nextInt(range = sortBy.indices)]
         }
 
-        fun randomPage(): Int = 0
-//            Int.random(in = 1 until 20)
+        fun randomPage(): Int = random().nextInt(1, until = 20)
     }
 
 

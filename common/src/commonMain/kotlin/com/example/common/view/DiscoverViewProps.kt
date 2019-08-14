@@ -14,6 +14,7 @@ data class DiscoverViewProps(
     val dispatch: Dispatcher
 ) {
     fun reversedMoviesFirstIndexOf(id: String): Int = movies.reversed().indexOfFirst { it == id }
+    fun isLastMovieInList(id: String): Boolean = if (movies.isEmpty()) false else movies.last() == id
 }
 
 

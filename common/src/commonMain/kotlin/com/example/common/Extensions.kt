@@ -3,6 +3,7 @@ package com.example.common
 import com.example.common.MoviesSort.*
 import com.example.common.state.AppState
 import com.soywiz.klock.DateTime
+import com.soywiz.klock.DateTimeTz
 
 enum class MoviesSort(val title: String, val sortByAPI: String) {
     byReleaseDate("by release date", "release_date.asc"),
@@ -21,7 +22,7 @@ fun Collection<String>.sortedMoviesIds(by: MoviesSort, state: AppState): List<St
             .map { it.key }
 
         byReleaseDate -> state.moviesState.movies.filter { this.contains(it.key) }
-            .entries.sortedBy { it.value.releaseDate ?: DateTime.now() > it.value.releaseDate ?: DateTime.now() }
+            .entries.sortedBy { it.value.releaseDate > it.value.releaseDate }
             .map { it.key }
 
         byPopularity -> state.moviesState.movies.filter { this.contains(it.key) }
