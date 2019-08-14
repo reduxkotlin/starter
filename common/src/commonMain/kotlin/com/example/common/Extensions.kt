@@ -3,7 +3,6 @@ package com.example.common
 import com.example.common.MoviesSort.*
 import com.example.common.state.AppState
 import com.soywiz.klock.DateTime
-import com.soywiz.klock.DateTimeTz
 
 enum class MoviesSort(val title: String, val sortByAPI: String) {
     byReleaseDate("by release date", "release_date.asc"),
@@ -11,8 +10,6 @@ enum class MoviesSort(val title: String, val sortByAPI: String) {
     byScore("by rating", "vote_average.desc"),
     byPopularity("by populartiy", "popularity.desc")
 }
-
-//FIXME: @SwiftKotlin - Kotlin does not support where clauses in extensions:  where Iterator.Element == Int
 
 fun Collection<String>.sortedMoviesIds(by: MoviesSort, state: AppState): List<String> =
     when (by) {

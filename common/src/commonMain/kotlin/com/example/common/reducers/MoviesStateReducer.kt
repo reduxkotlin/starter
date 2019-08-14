@@ -9,13 +9,6 @@ import com.example.common.state.MoviesState
 import com.soywiz.klock.DateTime
 
 
-//
-//  MoviesStateReducer.swift
-//  MovieSwift
-//
-//  Created by Thomas Ricouard on 06/06/2019.
-//  Copyright © 2019 Thomas Ricouard. All rights reserved.
-//
 fun moviesStateReducer(state: MoviesState, action: Any) : MoviesState {
     var state = state
     when (action) {

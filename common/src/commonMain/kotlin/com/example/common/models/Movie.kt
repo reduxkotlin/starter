@@ -1,6 +1,7 @@
 package com.example.common.models
 
 import com.benasher44.uuid.Uuid
+import com.example.common.preferences.AppUserDefaults
 import com.soywiz.klock.DateFormat
 import com.soywiz.klock.DateTime
 import com.soywiz.klock.DateTimeTz
@@ -9,13 +10,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 
-//
-//  Movie.swift
-//  MovieSwift
-//
-//  Created by Thomas Ricouard on 06/06/2019.
-//  Copyright © 2019 Thomas Ricouard. All rights reserved.
-//
 @Serializable
 data class Movie(
     val id: String,
@@ -39,8 +33,9 @@ data class Movie(
 ) {
     private val dateFormatter: DateFormat by lazy { DateFormat("yyyy-MM-dd") }
 
-    val userTitle: String
-        get() = original_title //TODO if (AppUserDefaults.alwaysOriginalTitle) original_title else title
+    fun userTitle(appUserDefaults: AppUserDefaults): String =
+        if (appUserDefaults.alwaysOriginalTitle) original_title else title
+
     val releaseDate: DateTimeTz
         get() = if (release_date != null) dateFormatter.parse(release_date!!) else DateTimeTz.nowLocal()
 

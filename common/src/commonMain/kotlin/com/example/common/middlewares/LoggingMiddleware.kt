@@ -3,7 +3,6 @@ package com.example.common.middlewares
 import com.example.common.state.AppState
 import com.github.aakira.napier.Napier
 import org.reduxkotlin.Middleware
-import org.reduxkotlin.middleware
 
 val loggingMiddleware: Middleware<AppState> = { store ->
     { next ->

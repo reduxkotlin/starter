@@ -2,37 +2,24 @@ package com.example.common.actions
 
 import com.example.common.MoviesSort
 import com.example.common.models.*
+import com.example.common.preferences.AppUserDefaults
 import com.example.common.services.APIService
 import com.example.common.services.APIService.*
-import com.example.common.state.AppState
 import com.example.common.state.MoviesMenu
 import com.example.common.thunk
 import com.github.aakira.napier.Napier
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import org.reduxkotlin.Thunk
-import org.reduxkotlin.createThunk
-import kotlin.Result.Companion.failure
 
-
-//
-//  MoviesAction.swift
-//  MovieSwift
-//
-//  Created by Thomas Ricouard on 06/06/2019.
-//  Copyright © 2019 Thomas Ricouard. All rights reserved.
-//
-class MoviesActions(private val apiService: APIService) {
-    // MARK: - Requests
+class MoviesActions(private val apiService: APIService,
+                    private val appUserDefaults: AppUserDefaults) {
 
     fun fetchMoviesMenuList(list: MoviesMenu, page: Int) = thunk { dispatch, _, _ ->
         apiService.GET<MoviePaginatedResponse>(
             endpoint = list.endpoint,
             params = mapOf(
                 "page" to page.toString(),
-                "region" to "us"
-            ) //AppUserDefaults.region)
+                "region" to appUserDefaults.region
+            )
         ) {
             onSuccess {
                 dispatch(

@@ -5,13 +5,6 @@ import com.example.common.models.People
 import com.example.common.state.PeoplesState
 
 
-//
-//  CastsReducer.swift
-//  MovieSwift
-//
-//  Created by Thomas Ricouard on 09/06/2019.
-//  Copyright © 2019 Thomas Ricouard. All rights reserved.
-//
 fun peoplesStateReducer(state: PeoplesState, action: Any): PeoplesState {
     var state = state
     when (action) {
@@ -84,7 +77,7 @@ fun peoplesStateReducer(state: PeoplesState, action: Any): PeoplesState {
 }
 
 private fun mergePeople(peoples: List<People>, state: PeoplesState): PeoplesState {
-    var state = state
+    val state = state
     for (people in peoples) {
         if (state.peoples[people.id] == null) {
             state.peoples[people.id] = people

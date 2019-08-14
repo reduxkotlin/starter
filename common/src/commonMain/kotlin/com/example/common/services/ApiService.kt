@@ -24,13 +24,6 @@ import kotlinx.serialization.json.Json
 import kotlin.coroutines.CoroutineContext
 
 
-//
-//  APIService.swift
-//  MovieSwift
-//
-//  Created by Thomas Ricouard on 06/06/2019.
-//  Copyright © 2019 Thomas Ricouard. All rights reserved.
-//
 class APIService(
     private val networkContext: CoroutineContext
 ): CoroutineScope {
@@ -147,9 +140,9 @@ class APIService(
                     params?.forEach { parameter(it.key, it.value) }
                     Napier.d("URL: ${url.buildString()}")
                 }
-
                 completionHandler(Result.success(response))
             } catch (e: Exception) {
+                //TODO return appropriate APIErrors
                 completionHandler(Result.failure(e))
             }
         }

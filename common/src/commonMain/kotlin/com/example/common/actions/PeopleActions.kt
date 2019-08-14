@@ -7,13 +7,6 @@ import com.example.common.thunk
 import com.github.aakira.napier.Napier
 import kotlinx.serialization.Serializable
 
-//
-//  CastsAction.swift
-//  MovieSwift
-//
-//  Created by Thomas Ricouard on 09/06/2019.
-//  Copyright © 2019 Thomas Ricouard. All rights reserved.
-//
 class PeopleActions(private val apiService: APIService) {
 
     fun fetchDetail(people: String) = thunk { dispatch, _, _ ->
